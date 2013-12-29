@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>hash.rs.html -- source</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Oswald:700|Inconsolata:400'
+          rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../../../rust-openssl/main.css">
+
+    
+</head>
+<body>
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    <section class="sidebar">
+        
+
+        
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <button class="do-search">Search</button>
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Search documentation..."
+                       type="search" />
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content source"><pre class='line-numbers'><span id='1'>  1</span>
+<span id='2'>  2</span>
+<span id='3'>  3</span>
+<span id='4'>  4</span>
+<span id='5'>  5</span>
+<span id='6'>  6</span>
+<span id='7'>  7</span>
+<span id='8'>  8</span>
+<span id='9'>  9</span>
+<span id='10'> 10</span>
+<span id='11'> 11</span>
+<span id='12'> 12</span>
+<span id='13'> 13</span>
+<span id='14'> 14</span>
+<span id='15'> 15</span>
+<span id='16'> 16</span>
+<span id='17'> 17</span>
+<span id='18'> 18</span>
+<span id='19'> 19</span>
+<span id='20'> 20</span>
+<span id='21'> 21</span>
+<span id='22'> 22</span>
+<span id='23'> 23</span>
+<span id='24'> 24</span>
+<span id='25'> 25</span>
+<span id='26'> 26</span>
+<span id='27'> 27</span>
+<span id='28'> 28</span>
+<span id='29'> 29</span>
+<span id='30'> 30</span>
+<span id='31'> 31</span>
+<span id='32'> 32</span>
+<span id='33'> 33</span>
+<span id='34'> 34</span>
+<span id='35'> 35</span>
+<span id='36'> 36</span>
+<span id='37'> 37</span>
+<span id='38'> 38</span>
+<span id='39'> 39</span>
+<span id='40'> 40</span>
+<span id='41'> 41</span>
+<span id='42'> 42</span>
+<span id='43'> 43</span>
+<span id='44'> 44</span>
+<span id='45'> 45</span>
+<span id='46'> 46</span>
+<span id='47'> 47</span>
+<span id='48'> 48</span>
+<span id='49'> 49</span>
+<span id='50'> 50</span>
+<span id='51'> 51</span>
+<span id='52'> 52</span>
+<span id='53'> 53</span>
+<span id='54'> 54</span>
+<span id='55'> 55</span>
+<span id='56'> 56</span>
+<span id='57'> 57</span>
+<span id='58'> 58</span>
+<span id='59'> 59</span>
+<span id='60'> 60</span>
+<span id='61'> 61</span>
+<span id='62'> 62</span>
+<span id='63'> 63</span>
+<span id='64'> 64</span>
+<span id='65'> 65</span>
+<span id='66'> 66</span>
+<span id='67'> 67</span>
+<span id='68'> 68</span>
+<span id='69'> 69</span>
+<span id='70'> 70</span>
+<span id='71'> 71</span>
+<span id='72'> 72</span>
+<span id='73'> 73</span>
+<span id='74'> 74</span>
+<span id='75'> 75</span>
+<span id='76'> 76</span>
+<span id='77'> 77</span>
+<span id='78'> 78</span>
+<span id='79'> 79</span>
+<span id='80'> 80</span>
+<span id='81'> 81</span>
+<span id='82'> 82</span>
+<span id='83'> 83</span>
+<span id='84'> 84</span>
+<span id='85'> 85</span>
+<span id='86'> 86</span>
+<span id='87'> 87</span>
+<span id='88'> 88</span>
+<span id='89'> 89</span>
+<span id='90'> 90</span>
+<span id='91'> 91</span>
+<span id='92'> 92</span>
+<span id='93'> 93</span>
+<span id='94'> 94</span>
+<span id='95'> 95</span>
+<span id='96'> 96</span>
+<span id='97'> 97</span>
+<span id='98'> 98</span>
+<span id='99'> 99</span>
+<span id='100'>100</span>
+<span id='101'>101</span>
+<span id='102'>102</span>
+<span id='103'>103</span>
+<span id='104'>104</span>
+<span id='105'>105</span>
+<span id='106'>106</span>
+<span id='107'>107</span>
+<span id='108'>108</span>
+<span id='109'>109</span>
+<span id='110'>110</span>
+<span id='111'>111</span>
+<span id='112'>112</span>
+<span id='113'>113</span>
+<span id='114'>114</span>
+<span id='115'>115</span>
+<span id='116'>116</span>
+<span id='117'>117</span>
+<span id='118'>118</span>
+<span id='119'>119</span>
+<span id='120'>120</span>
+<span id='121'>121</span>
+<span id='122'>122</span>
+<span id='123'>123</span>
+<span id='124'>124</span>
+<span id='125'>125</span>
+<span id='126'>126</span>
+<span id='127'>127</span>
+<span id='128'>128</span>
+<span id='129'>129</span>
+<span id='130'>130</span>
+<span id='131'>131</span>
+<span id='132'>132</span>
+<span id='133'>133</span>
+<span id='134'>134</span>
+<span id='135'>135</span>
+<span id='136'>136</span>
+<span id='137'>137</span>
+<span id='138'>138</span>
+<span id='139'>139</span>
+<span id='140'>140</span>
+<span id='141'>141</span>
+<span id='142'>142</span>
+<span id='143'>143</span>
+<span id='144'>144</span>
+<span id='145'>145</span>
+<span id='146'>146</span>
+<span id='147'>147</span>
+<span id='148'>148</span>
+<span id='149'>149</span>
+<span id='150'>150</span>
+<span id='151'>151</span>
+<span id='152'>152</span>
+<span id='153'>153</span>
+<span id='154'>154</span>
+<span id='155'>155</span>
+<span id='156'>156</span>
+<span id='157'>157</span>
+<span id='158'>158</span>
+<span id='159'>159</span>
+<span id='160'>160</span>
+<span id='161'>161</span>
+<span id='162'>162</span>
+<span id='163'>163</span>
+<span id='164'>164</span>
+<span id='165'>165</span>
+<span id='166'>166</span>
+<span id='167'>167</span>
+<span id='168'>168</span>
+<span id='169'>169</span>
+<span id='170'>170</span>
+<span id='171'>171</span>
+<span id='172'>172</span>
+<span id='173'>173</span>
+<span id='174'>174</span>
+<span id='175'>175</span>
+<span id='176'>176</span>
+<span id='177'>177</span>
+</pre><pre class='rust'>use std::libc::c_uint;
+use std::libc;
+use std::ptr;
+use std::vec;
+
+pub enum HashType {
+    MD5,
+    SHA1,
+    SHA224,
+    SHA256,
+    SHA384,
+    SHA512
+}
+
+#[allow(non_camel_case_types)]
+pub type EVP_MD_CTX = *libc::c_void;
+
+#[allow(non_camel_case_types)]
+pub type EVP_MD = *libc::c_void;
+
+#[link(name = &quot;crypto&quot;)]
+extern {
+    fn EVP_MD_CTX_create() -&gt; EVP_MD_CTX;
+    fn EVP_MD_CTX_destroy(ctx: EVP_MD_CTX);
+
+    fn EVP_md5() -&gt; EVP_MD;
+    fn EVP_sha1() -&gt; EVP_MD;
+    fn EVP_sha224() -&gt; EVP_MD;
+    fn EVP_sha256() -&gt; EVP_MD;
+    fn EVP_sha384() -&gt; EVP_MD;
+    fn EVP_sha512() -&gt; EVP_MD;
+
+    fn EVP_DigestInit(ctx: EVP_MD_CTX, typ: EVP_MD);
+    fn EVP_DigestUpdate(ctx: EVP_MD_CTX, data: *u8, n: c_uint);
+    fn EVP_DigestFinal(ctx: EVP_MD_CTX, res: *mut u8, n: *u32);
+}
+
+pub fn evpmd(t: HashType) -&gt; (EVP_MD, uint) {
+    unsafe {
+        match t {
+            MD5 =&gt; (EVP_md5(), 16u),
+            SHA1 =&gt; (EVP_sha1(), 20u),
+            SHA224 =&gt; (EVP_sha224(), 28u),
+            SHA256 =&gt; (EVP_sha256(), 32u),
+            SHA384 =&gt; (EVP_sha384(), 48u),
+            SHA512 =&gt; (EVP_sha512(), 64u),
+        }
+    }
+}
+
+pub struct Hasher {
+    priv evp: EVP_MD,
+    priv ctx: EVP_MD_CTX,
+    priv len: uint,
+}
+
+impl Hasher {
+    pub fn new(ht: HashType) -&gt; Hasher {
+        let ctx = unsafe { EVP_MD_CTX_create() };
+        let (evp, mdlen) = evpmd(ht);
+        unsafe {
+            EVP_DigestInit(ctx, evp);
+        }
+
+        Hasher { evp: evp, ctx: ctx, len: mdlen }
+    }
+
+    /// Update this hasher with more input bytes
+    pub fn update(&amp;self, data: &amp;[u8]) {
+        unsafe {
+            EVP_DigestUpdate(self.ctx, data.as_ptr(), data.len() as c_uint)
+        }
+    }
+
+    /**
+     * Return the digest of all bytes added to this hasher since its last
+     * initialization
+     */
+    pub fn final(&amp;self) -&gt; ~[u8] {
+        unsafe {
+            let mut res = vec::from_elem(self.len, 0u8);
+            EVP_DigestFinal(self.ctx, res.as_mut_ptr(), ptr::null());
+            res
+        }
+    }
+}
+
+impl Drop for Hasher {
+    fn drop(&amp;mut self) {
+        unsafe {
+            EVP_MD_CTX_destroy(self.ctx);
+        }
+    }
+}
+
+/**
+ * Hashes the supplied input data using hash t, returning the resulting hash
+ * value
+ */
+pub fn hash(t: HashType, data: &amp;[u8]) -&gt; ~[u8] {
+    let h = Hasher::new(t);
+    h.update(data);
+    h.final()
+}
+
+#[cfg(test)]
+mod tests {
+    use crypto::hex::FromHex;
+    use crypto::hex::ToHex;
+
+    struct HashTest {
+        input: ~[u8],
+        expected_output: ~str
+    }
+
+    fn HashTest(input: ~str, output: ~str) -&gt; HashTest {
+        HashTest { input: input.from_hex(),
+                   expected_output: output }
+    }
+
+    fn hash_test(hashtype: super::HashType, hashtest: &amp;HashTest) {
+        let calced_raw = super::hash(hashtype, hashtest.input);
+
+        let calced = calced_raw.to_hex();
+
+        if calced != hashtest.expected_output {
+            println!(&quot;Test failed - {} != {}&quot;, calced, hashtest.expected_output);
+        }
+
+        assert!(calced == hashtest.expected_output);
+    }
+
+    // Test vectors from http://www.nsrl.nist.gov/testdata/
+    #[test]
+    fn test_md5() {
+        let tests = [
+            HashTest(~&quot;&quot;, ~&quot;D41D8CD98F00B204E9800998ECF8427E&quot;),
+            HashTest(~&quot;7F&quot;, ~&quot;83ACB6E67E50E31DB6ED341DD2DE1595&quot;),
+            HashTest(~&quot;EC9C&quot;, ~&quot;0B07F0D4CA797D8AC58874F887CB0B68&quot;),
+            HashTest(~&quot;FEE57A&quot;, ~&quot;E0D583171EB06D56198FC0EF22173907&quot;),
+            HashTest(~&quot;42F497E0&quot;, ~&quot;7C430F178AEFDF1487FEE7144E9641E2&quot;),
+            HashTest(~&quot;C53B777F1C&quot;, ~&quot;75EF141D64CB37EC423DA2D9D440C925&quot;),
+            HashTest(~&quot;89D5B576327B&quot;, ~&quot;EBBAF15EB0ED784C6FAA9DC32831BF33&quot;),
+            HashTest(~&quot;5D4CCE781EB190&quot;, ~&quot;CE175C4B08172019F05E6B5279889F2C&quot;),
+            HashTest(~&quot;81901FE94932D7B9&quot;, ~&quot;CD4D2F62B8CDB3A0CF968A735A239281&quot;),
+            HashTest(~&quot;C9FFDEE7788EFB4EC9&quot;, ~&quot;E0841A231AB698DB30C6C0F3F246C014&quot;),
+            HashTest(~&quot;66AC4B7EBA95E53DC10B&quot;, ~&quot;A3B3CEA71910D9AF56742AA0BB2FE329&quot;),
+            HashTest(~&quot;A510CD18F7A56852EB0319&quot;, ~&quot;577E216843DD11573574D3FB209B97D8&quot;),
+            HashTest(~&quot;AAED18DBE8938C19ED734A8D&quot;, ~&quot;6F80FB775F27E0A4CE5C2F42FC72C5F1&quot;)];
+
+        for test in tests.iter() {
+            hash_test(super::MD5, test);
+        }
+    }
+
+    #[test]
+    fn test_sha1() {
+        let tests = [
+            HashTest(~&quot;616263&quot;, ~&quot;A9993E364706816ABA3E25717850C26C9CD0D89D&quot;),
+            ];
+
+        for test in tests.iter() {
+            hash_test(super::SHA1, test);
+        }
+    }
+
+    #[test]
+    fn test_sha256() {
+        let tests = [
+            HashTest(~&quot;616263&quot;, ~&quot;BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD&quot;)
+            ];
+
+        for test in tests.iter() {
+            hash_test(super::SHA256, test);
+        }
+    }
+}
+</pre></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <script>
+        var rootPath = "../../../";
+    </script>
+    <script src="../../../rust-openssl/jquery.js"></script>
+    <script src="../../../rust-openssl/search-index.js"></script>
+    <script src="../../../rust-openssl/main.js"></script>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&uarr;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&darr;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code> (or <code>str</code>), <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>rust-openssl::crypto::pkey::PKey - Rust</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Oswald:700|Inconsolata:400'
+          rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../../../rust-openssl/main.css">
+
+    
+</head>
+<body>
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    <section class="sidebar">
+        
+
+        <p class='location'><a href='../../index.html'>rust-openssl</a>&#8203;::<a href='../index.html'>crypto</a>&#8203;::<a href='index.html'>pkey</a></p><div class='block struct'><h2>Structs</h2><a class='struct current' href='struct.PKey.html'>PKey</a><br/></div><div class='block enum'><h2>Enums</h2><a class='enum ' href='enum.EncryptionPadding.html'>EncryptionPadding</a><br/><a class='enum ' href='enum.Role.html'>Role</a><br/></div>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <button class="do-search">Search</button>
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Search documentation..."
+                       type="search" />
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct"><a class='source'
+                       href='../../../src/rust-openssl/crypto/pkey.rs.html#77-80'>[src]</a><h1 class='fqn'>Struct <a href='../../index.html'>rust-openssl</a>::<a href='../index.html'>crypto</a>::<a href='index.html'>pkey</a>::<a class='struct' href=''>PKey</a></h1><pre class='struct'>pub struct PKey {
+    // some fields omitted
+}</pre><h2 class='fields'>Fields</h2>
+<table></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../../rust-openssl/crypto/pkey/struct.PKey.html' title='rust-openssl::crypto::pkey::PKey'>PKey</a></code></h3><div class='docblock'><p>Represents a public key, optionally with a private key attached.</p>
+</div><div class='methods'><h4 id='method.new' class='method'><code>fn <span class='fnname'>new</span>() -&gt; <a class='struct' href='../../../rust-openssl/crypto/pkey/struct.PKey.html' title='rust-openssl::crypto::pkey::PKey'>PKey</a></code></h4>
+<h4 id='method.gen' class='method'><code>fn <span class='fnname'>gen</span>(&amp;mut self, keysz: uint)</code></h4>
+<h4 id='method.save_pub' class='method'><code>fn <span class='fnname'>save_pub</span>(&amp;self) -&gt; ~[u8]</code></h4>
+<div class='docblock'><p>Returns a serialized form of the public key, suitable for load_pub().</p>
+</div><h4 id='method.load_pub' class='method'><code>fn <span class='fnname'>load_pub</span>(&amp;mut self, s: &amp;[u8])</code></h4>
+<div class='docblock'><p>Loads a serialized form of the public key, as produced by save_pub().</p>
+</div><h4 id='method.save_priv' class='method'><code>fn <span class='fnname'>save_priv</span>(&amp;self) -&gt; ~[u8]</code></h4>
+<div class='docblock'><p>Returns a serialized form of the public and private keys, suitable for
+load_priv().</p>
+</div><h4 id='method.load_priv' class='method'><code>fn <span class='fnname'>load_priv</span>(&amp;mut self, s: &amp;[u8])</code></h4>
+<div class='docblock'><p>Loads a serialized form of the public and private keys, as produced by
+save_priv().</p>
+</div><h4 id='method.size' class='method'><code>fn <span class='fnname'>size</span>(&amp;self) -&gt; uint</code></h4>
+<div class='docblock'><p>Returns the size of the public key modulus.</p>
+</div><h4 id='method.can' class='method'><code>fn <span class='fnname'>can</span>(&amp;self, r: <a class='enum' href='../../../rust-openssl/crypto/pkey/enum.Role.html' title='rust-openssl::crypto::pkey::Role'>Role</a>) -&gt; bool</code></h4>
+<div class='docblock'><p>Returns whether this pkey object can perform the specified role.</p>
+</div><h4 id='method.max_data' class='method'><code>fn <span class='fnname'>max_data</span>(&amp;self) -&gt; uint</code></h4>
+<div class='docblock'><p>Returns the maximum amount of data that can be encrypted by an encrypt()
+call.</p>
+</div><h4 id='method.encrypt_with_padding' class='method'><code>fn <span class='fnname'>encrypt_with_padding</span>(&amp;self, s: &amp;[u8], padding: <a class='enum' href='../../../rust-openssl/crypto/pkey/enum.EncryptionPadding.html' title='rust-openssl::crypto::pkey::EncryptionPadding'>EncryptionPadding</a>) -&gt; ~[u8]</code></h4>
+<h4 id='method.decrypt_with_padding' class='method'><code>fn <span class='fnname'>decrypt_with_padding</span>(&amp;self, s: &amp;[u8], padding: <a class='enum' href='../../../rust-openssl/crypto/pkey/enum.EncryptionPadding.html' title='rust-openssl::crypto::pkey::EncryptionPadding'>EncryptionPadding</a>) -&gt; ~[u8]</code></h4>
+<h4 id='method.encrypt' class='method'><code>fn <span class='fnname'>encrypt</span>(&amp;self, s: &amp;[u8]) -&gt; ~[u8]</code></h4>
+<div class='docblock'><p>Encrypts data using OAEP padding, returning the encrypted data. The
+supplied data must not be larger than max_data().</p>
+</div><h4 id='method.decrypt' class='method'><code>fn <span class='fnname'>decrypt</span>(&amp;self, s: &amp;[u8]) -&gt; ~[u8]</code></h4>
+<div class='docblock'><p>Decrypts data, expecting OAEP padding, returning the decrypted data.</p>
+</div><h4 id='method.sign' class='method'><code>fn <span class='fnname'>sign</span>(&amp;self, s: &amp;[u8]) -&gt; ~[u8]</code></h4>
+<div class='docblock'><p>Signs data, using OpenSSL&#39;s default scheme and sha256. Unlike encrypt(),
+can process an arbitrary amount of data; returns the signature.</p>
+</div><h4 id='method.verify' class='method'><code>fn <span class='fnname'>verify</span>(&amp;self, m: &amp;[u8], s: &amp;[u8]) -&gt; bool</code></h4>
+<div class='docblock'><p>Verifies a signature s (using OpenSSL&#39;s default scheme and sha256) on a
+message m. Returns true if the signature is valid, and false otherwise.</p>
+</div><h4 id='method.sign_with_hash' class='method'><code>fn <span class='fnname'>sign_with_hash</span>(&amp;self, s: &amp;[u8], hash: <a class='enum' href='../../../rust-openssl/crypto/hash/enum.HashType.html' title='rust-openssl::crypto::hash::HashType'>HashType</a>) -&gt; ~[u8]</code></h4>
+<h4 id='method.verify_with_hash' class='method'><code>fn <span class='fnname'>verify_with_hash</span>(&amp;self, m: &amp;[u8], s: &amp;[u8], hash: <a class='enum' href='../../../rust-openssl/crypto/hash/enum.HashType.html' title='rust-openssl::crypto::hash::HashType'>HashType</a>) -&gt; bool</code></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://static.rust-lang.org/doc/master/std/ops/trait.Drop.html' title='std::ops::Drop'>Drop</a> for <a class='struct' href='../../../rust-openssl/crypto/pkey/struct.PKey.html' title='rust-openssl::crypto::pkey::PKey'>PKey</a></code></h3><div class='methods'><h4 id='method.drop' class='method'><code>fn <span class='fnname'>drop</span>(&amp;mut self)</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <script>
+        var rootPath = "../../../";
+    </script>
+    <script src="../../../rust-openssl/jquery.js"></script>
+    <script src="../../../rust-openssl/search-index.js"></script>
+    <script src="../../../rust-openssl/main.js"></script>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&uarr;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&darr;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code> (or <code>str</code>), <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+</body>
+</html>
